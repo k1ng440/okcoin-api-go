@@ -160,8 +160,11 @@ func (r *Response) GetConverted() (interface{}, error) {
 		return r.GetDepth()
 	} else if r.Channel == "ok_btcusd_trades_v1" || r.Channel == "ok_btccny_trades_v1" {
 		return r.GetTrades()
+	} else if r.Channel == "ok_spotusd_userinfo" || r.Channel == "ok_spotcny_userinfo" {
+		//return r.GetUserInfo()
+		return nil, errors.New("Not implemented yet: " + r.Channel)
 	}
-	return nil, errors.New("Unrecognized response")
+	return nil, errors.New("Unrecognized response: " + r.Channel)
 }
 
 func (r *Response) getDataAsMap() (map[string]interface{}, error) {
