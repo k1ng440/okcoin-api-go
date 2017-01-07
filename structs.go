@@ -17,7 +17,12 @@ func init() {
 		"ok_spotusd_trade":        1,
 		"ok_spotusd_cancel_order": 1,
 		"ok_spotusd_userinfo":     1,
-		"ok_spotusd_order_info":   1}
+		"ok_spotusd_order_info":   1,
+		"ok_cny_realtrades":       1,
+		"ok_spotcny_trade":        1,
+		"ok_spotcny_cancel_order": 1,
+		"ok_spotcny_userinfo":     1,
+		"ok_spotcny_order_info":   1}
 }
 
 //Response contains channel string and Data interface
@@ -149,14 +154,17 @@ func (r *Response) GetTrades() (t *Trades, err error) {
 //GetConverted checks channel, and runs GetTicker, GetDepth, or GetTrades
 func (r *Response) GetConverted() (interface{}, error) {
 
-	if r.Channel == "ok_btcusd_ticker" || r.Channel == "ok_ltcusd_ticker" {
+	if r.Channel == "ok_btcusd_ticker" || r.Channel == "ok_ltcusd_ticker" || r.Channel == "ok_btccny_ticker" || r.Channel == "ok_ltccny_ticker" {
 		return r.GetTicker()
-	} else if r.Channel == "ok_btcusd_depth" || r.Channel == "ok_ltcusd_depth" {
+	} else if r.Channel == "ok_btcusd_depth" || r.Channel == "ok_ltcusd_depth" || r.Channel == "ok_btccny_depth" || r.Channel == "ok_ltccny_depth" {
 		return r.GetDepth()
-	} else if r.Channel == "ok_btcusd_trades_v1" {
+	} else if r.Channel == "ok_btcusd_trades_v1" || r.Channel == "ok_btccny_trades_v1" {
 		return r.GetTrades()
+	} else if r.Channel == "ok_spotusd_userinfo" || r.Channel == "ok_spotcny_userinfo" {
+		//return r.GetUserInfo()
+		return nil, errors.New("Not implemented yet: " + r.Channel)
 	}
-	return nil, errors.New("Unrecognized response")
+	return nil, errors.New("Unrecognized response: " + r.Channel)
 }
 
 func (r *Response) getDataAsMap() (map[string]interface{}, error) {

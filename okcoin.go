@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"sort"
 	"strings"
 	"time"
@@ -59,8 +60,12 @@ func NewWsAPI(publicKey, privateKey string) (*WsAPI, error) {
 
 //Connect establishes websocket connection
 func (w *WsAPI) Connect(symbol string, timeout time.Duration) (err error) {
-	dialer := websocket.Dialer{ReadBufferSize: 10000, WriteBufferSize: 1000,
-		HandshakeTimeout: timeout * time.Second}
+	dialer := websocket.Dialer{
+		ReadBufferSize:   10000,
+		WriteBufferSize:  1000,
+		HandshakeTimeout: timeout * time.Second,
+		Proxy:            http.ProxyFromEnvironment,
+	}
 	if symbol == "btc_cny" {
 		w.ws, _, err = dialer.Dial(CNYWsAPIURL, nil)
 	} else if symbol == "btc_usd" {
