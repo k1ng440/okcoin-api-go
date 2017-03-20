@@ -44,7 +44,7 @@ type TickerData struct {
 	Last      float64
 	Low       float64
 	Sell      float64
-	Timestamp uint64
+	Timestamp int64
 	Vol       float64
 }
 
@@ -154,7 +154,7 @@ func (r *Response) GetTrades() (t *Trades, err error) {
 //GetConverted checks channel, and runs GetTicker, GetDepth, or GetTrades
 func (r *Response) GetConverted() (interface{}, error) {
 
-	if r.Channel == "ok_btcusd_ticker" || r.Channel == "ok_ltcusd_ticker" || r.Channel == "ok_btccny_ticker" || r.Channel == "ok_ltccny_ticker" {
+	if r.Channel == "ok_sub_spotusd_btc_ticker" || r.Channel == "ok_ltcusd_ticker" || r.Channel == "ok_btccny_ticker" || r.Channel == "ok_ltccny_ticker" {
 		return r.GetTicker()
 	} else if r.Channel == "ok_btcusd_depth" || r.Channel == "ok_ltcusd_depth" || r.Channel == "ok_btccny_depth" || r.Channel == "ok_ltccny_depth" {
 		return r.GetDepth()
@@ -240,13 +240,13 @@ func convertMapToStruct(data map[string]interface{}, result interface{}) error {
 			} else {
 				field.SetFloat(data[name].(float64))
 			}
-		case "uint64":
+		case "int64":
 			if data[name] != nil {
-				value, err := strconv.ParseUint(data[name].(string), 10, 64)
+				value, err := strconv.ParseInt(data[name].(string), 10, 64)
 				if err != nil {
-					return err
+				return err
 				}
-				field.SetUint(value)
+				field.SetInt(value)
 			}
 		}
 	}

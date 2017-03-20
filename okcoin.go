@@ -32,9 +32,9 @@ type Req struct {
 	//Channel specifies the channel name
 	Channel string
 	//On true - enable channel, false disable channel
-	On bool
+	On      bool
 	//Params - parameters specific for particular channel
-	Params map[string]string
+	Params  map[string]string
 }
 
 //NewReq creates new request *Req
@@ -66,9 +66,9 @@ func (w *WsAPI) Connect(symbol string, timeout time.Duration) (err error) {
 		HandshakeTimeout: timeout * time.Second,
 		Proxy:            http.ProxyFromEnvironment,
 	}
-	if symbol == "btc_cny" {
+	if symbol == "cny" {
 		w.ws, _, err = dialer.Dial(CNYWsAPIURL, nil)
-	} else if symbol == "btc_usd" {
+	} else if symbol == "usd" {
 		w.ws, _, err = dialer.Dial(USDWsAPIURL, nil)
 	}
 	return err
