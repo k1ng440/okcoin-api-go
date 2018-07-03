@@ -22,7 +22,7 @@ func TestInit(t *testing.T) {
 	assert.Equal(api.prvKey, prv)
 
 	api, err = NewWsAPI(pub, "")
-	assert.NotNil(err)
+	assert.Nil(err)
 }
 
 /*
@@ -158,7 +158,7 @@ func TestTicker(t *testing.T) {
 	//fmt.Printf("%#v", ticker)
 	assert.Equal(253.36, ticker.Data.Buy)
 	assert.Equal(8705.22, ticker.Data.Vol)
-	assert.Equal(uint64(1435925683940), ticker.Data.Timestamp)
+	assert.Equal(int64(1435925683940), ticker.Data.Timestamp)
 
 	val, err := ret[0].GetConverted()
 	assert.Nil(err)
@@ -167,7 +167,7 @@ func TestTicker(t *testing.T) {
 	case *Ticker:
 		assert.Equal(253.36, nval.Data.Buy)
 		assert.Equal(8705.22, nval.Data.Vol)
-		assert.Equal(uint64(1435925683940), nval.Data.Timestamp)
+		assert.Equal(int64(1435925683940), nval.Data.Timestamp)
 	}
 }
 
@@ -207,7 +207,7 @@ func TestTrades(t *testing.T) {
 
 	//fmt.Printf("%#v\n", trades)
 
-	assert.Equal(uint64(24307225), trades.Data[0].Id)
+	assert.Equal(uint64(24307225), trades.Data[0].ID)
 	assert.Equal(257.46, trades.Data[1].Price)
 	assert.Equal(0.78, trades.Data[2].Amount)
 	assert.Equal("22:33:10", trades.Data[2].Time)
@@ -220,7 +220,7 @@ func TestTrades(t *testing.T) {
 	trades, ok := val.(*Trades)
 	assert.True(ok)
 	//fmt.Printf("%#v", trades)
-	assert.Equal(uint64(24307225), trades.Data[0].Id)
+	assert.Equal(uint64(24307225), trades.Data[0].ID)
 	assert.Equal(257.46, trades.Data[1].Price)
 	assert.Equal(0.78, trades.Data[2].Amount)
 	assert.Equal("22:33:10", trades.Data[2].Time)

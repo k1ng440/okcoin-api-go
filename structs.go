@@ -3,6 +3,8 @@ package okcoin
 import (
 	"encoding/json"
 	"errors"
+
+	"github.com/spf13/cast"
 	//	"fmt"
 	"reflect"
 	"strconv"
@@ -154,7 +156,7 @@ func (r *Response) GetTrades() (t *Trades, err error) {
 //GetConverted checks channel, and runs GetTicker, GetDepth, or GetTrades
 func (r *Response) GetConverted() (interface{}, error) {
 
-	if r.Channel == "ok_sub_spotusd_btc_ticker" || r.Channel == "ok_ltcusd_ticker" || r.Channel == "ok_btccny_ticker" || r.Channel == "ok_ltccny_ticker" {
+	if r.Channel == "ok_sub_spotusd_btc_ticker" || r.Channel == "ok_ltcusd_ticker" || r.Channel == "ok_btccny_ticker" || r.Channel == "ok_ltccny_ticker" || r.Channel == "ok_btcusd_ticker" {
 		return r.GetTicker()
 	} else if r.Channel == "ok_btcusd_depth" || r.Channel == "ok_ltcusd_depth" || r.Channel == "ok_btccny_depth" || r.Channel == "ok_ltccny_depth" {
 		return r.GetDepth()
@@ -220,7 +222,6 @@ func convertPriceAmounts(data interface{}) ([]PriceAmount, error) {
 }
 
 func convertMapToStruct(data map[string]interface{}, result interface{}) error {
-
 	resValue := reflect.ValueOf(result).Elem()
 
 	for i := 0; i < resValue.NumField(); i++ {
@@ -231,22 +232,10 @@ func convertMapToStruct(data map[string]interface{}, result interface{}) error {
 
 		switch fieldTypeName {
 		case "float64":
-			if reflect.TypeOf(data[name]).String() == "string" {
-				value, err := parseFloat64(data[name].(string))
-				if err != nil {
-					return err
-				}
-				field.SetFloat(value)
-			} else {
-				field.SetFloat(data[name].(float64))
-			}
+			field.SetFloat(cast.ToFloat64(data[name]))
 		case "int64":
 			if data[name] != nil {
-				value, err := strconv.ParseInt(data[name].(string), 10, 64)
-				if err != nil {
-				return err
-				}
-				field.SetInt(value)
+				field.SetInt(cast.ToInt64(data[name]))
 			}
 		}
 	}
