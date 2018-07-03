@@ -242,36 +242,6 @@ func convertMapToStruct(data map[string]interface{}, result interface{}) error {
 	return nil
 }
 
-/*
-func convertStringListToStruct(data []string, result interface{}) error {
-
-	resValue := reflect.ValueOf(result).Elem()
-
-	for i := 0; i < resValue.NumField(); i++ {
-		field := resValue.Field(i)
-		fieldTypeName := field.Type().Name()
-
-		switch fieldTypeName {
-		case "float64":
-			value, err := parseFloat64(data[i])
-			if err != nil {
-				return err
-			}
-			field.SetFloat(value)
-		case "uint64":
-			value, err := strconv.ParseUint(data[i], 10, 64)
-			if err != nil {
-				return err
-			}
-			field.SetUint(value)
-		case "string":
-			field.SetString(data[i])
-		}
-	}
-	return nil
-}
-*/
-
 func parseFloat64(s string) (float64, error) {
 	return strconv.ParseFloat(strings.Replace(s, ",", "", -1), 64)
 }
